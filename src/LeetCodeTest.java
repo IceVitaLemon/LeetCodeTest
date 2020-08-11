@@ -453,6 +453,53 @@ public class LeetCodeTest {
         }
     }
 
+//    解数独
+//    编写一个程序，通过已填充的空格来解决数独问题。
+//    空白格用 '.' 表示。
+    public void solveSudoku(char[][] board) {
+        solveSudoku(board, 0, 0);
+    }
+
+    public boolean solveSudoku(char[][] board, int row, int col){
+        if(col == 9){
+            return solveSudoku(board, row + 1, 0);
+        }
+        if(row == 9){
+            return true;
+        }
+
+        if(board[row][col] != '.'){
+            return solveSudoku(board, row, col + 1);
+        }
+
+        for(int i = 1; i <= 9; ++i){
+            if(!sudokuIsValid(board, row, col, i)){
+                continue;
+            }
+            board[row][col] = (char)(i + '0');
+            if(solveSudoku(board, row, col + 1)){
+                return true;
+            }
+            board[row][col] = '.';
+        }
+        return false;
+    }
+
+    public boolean sudokuIsValid(char[][] board, int row, int col, int num){
+        for(int i = 0; i < 9; ++i){
+            if(num == board[row][i] - '0'){
+                return false;
+            }
+            if(num == board[i][col] - '0'){
+                return false;
+            }
+            if(num == board[(row/3)*3 + i/3][(col/3)*3 + i%3] - '0'){
+                return false;
+            }
+        }
+        return true;
+    }
+
 
 //    括号生成
 //    数字 n 代表生成括号的对数，请你设计一个函数，用于能够生成所有可能的并且 有效的 括号组合。
