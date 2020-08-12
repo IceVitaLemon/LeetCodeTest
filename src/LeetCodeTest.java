@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class LeetCodeTest {
 
@@ -566,6 +563,83 @@ public class LeetCodeTest {
         }
 
         return Math.min(countOdd, countEven);
+    }
+
+
+//    网络延迟时间
+//    有 N 个网络节点，标记为 1 到 N。
+//
+//    给定一个列表 times，表示信号经过有向边的传递时间。 times[i] = (u, v, w)，其中 u 是源节点，v 是目标节点， w 是一个信号从源节点传递到目标节点的时间。
+//
+//    现在，我们从某个节点 K 发出一个信号。需要多久才能使所有节点都收到信号？如果不能使所有节点收到信号，返回 -1。
+//
+//    输入：times = [[2,1,1],[2,3,1],[3,4,1]], N = 4, K = 2
+//    输出：2
+//
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/network-delay-time
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    //Dijkstra方法
+    public int networkDelayTime(int[][] times, int N, int K) {
+        //邻接表
+        Map<Integer, List<int[]>> distMap = new HashMap<>();
+        for(int[] edge : times){
+            if(!distMap.containsKey(edge[0])){
+                distMap.put(edge[0], new ArrayList<>());
+            }
+            distMap.get(edge[0]).add(new int[]{edge[1], edge[2]});
+        }
+
+        //K点到其他节点的距离
+        Map<Integer, Integer> minDist = new HashMap<>();
+        minDist.put(K, 0);
+        if(distMap.get(K) == null){
+            return -1;
+        }
+        for(int[] edge : distMap.get(K)){
+            minDist.put(edge[0], edge[1]);
+        }
+
+        //标记，记录已经是路径最小的位置
+        boolean[] minSet = new boolean[N + 1];
+        for(int i = 0; i < N; ++i){
+
+            //找出不在标记集合中的节点，K到此节点的距离是最小
+            int pos = 0;
+            int dist = Integer.MAX_VALUE;
+            for(Map.Entry<Integer, Integer> entry : minDist.entrySet()){
+                if(!minSet[entry.getKey()]){
+                    if(entry.getValue() < dist){
+                        dist = entry.getValue();
+                        pos = entry.getKey();
+                    }
+                }
+            }
+            if(pos == 0){
+                return -1;
+            }
+            //记录此节点
+            minSet[pos] = true;
+            if(distMap.get(pos) == null){
+                continue;
+            }
+
+            //更新与此节点连通的节点距离
+            for(int[] edge : distMap.get(pos)){
+                if(minDist.getOrDefault(edge[0], Integer.MAX_VALUE) > minDist.get(pos) + edge[1]){
+                    minDist.put(edge[0], minDist.get(pos) + edge[1]);
+                }
+            }
+        }
+
+        if(minDist.size() != N){
+            return -1;
+        }
+        int maxDist = 0;
+        for(int key : minDist.values()){
+            maxDist = Math.max(maxDist, key);
+        }
+        return maxDist;
     }
 
 }
