@@ -689,4 +689,111 @@ public class LeetCodeTest {
         return maxDist;
     }
 
+
+//    大数相加/字符串相加
+//    给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和。
+    public String addStrings(String num1, String num2) {
+        if(num1 == null || num2 == null || num1.length() == 0 || num2.length() == 0){
+            return null;
+        }
+        int index1 = num1.length() - 1;
+        int index2 = num2.length() - 1;
+        int carry = 0;
+        StringBuilder sb = new StringBuilder();
+        while(index1 >= 0 || index2 >= 0 || carry > 0){
+            int n1 = index1 >= 0 ? num1.charAt(index1) - '0' : 0;
+            int n2 = index2 >= 0 ? num2.charAt(index2) - '0' : 0;
+            int res = n1 + n2 + carry;
+            if(res > 9){
+                res -= 10;
+                carry = 1;
+            }else{
+                carry = 0;
+            }
+            sb.append(res);
+            --index1;
+            --index2;
+        }
+        return sb.reverse().toString();
+    }
+
+
+    //大数相减/字符串相减
+    //输入中num1 肯定大于 num2
+    public String minusString(String num1, String num2){
+        if(num1 == null || num2 == null || num1.length() == 0 || num2.length() == 0){
+            return "";
+        }
+        int index1 = num1.length() - 1;
+        int index2 = num2.length() - 1;
+        int borrow = 0;
+        StringBuilder sb = new StringBuilder();
+        while (index1 >= 0 || index2 >= 0){
+            int n1 = index1 >= 0 ? num1.charAt(index1) - '0' : 0;
+            int n2 = index2 >= 0 ? num2.charAt(index2) - '0' : 0;
+            int res = n1 - n2 - borrow;
+            if(res < 0){
+                res += 10;
+                borrow = 1;
+            }else {
+                borrow = 0;
+            }
+            sb.append(res);
+            --index1;
+            --index2;
+        }
+        while (sb.charAt(sb.length() - 1) == '0'){
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        return  sb.reverse().toString();
+    }
+
+
+//    大数相乘/字符串相乘
+//    给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+//
+//    示例 1:
+//
+//    输入: num1 = "2", num2 = "3"
+//    输出: "6"
+//    示例 2:
+//
+//    输入: num1 = "123", num2 = "456"
+//    输出: "56088"
+//
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/multiply-strings
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    public String multiply(String num1, String num2) {
+        if(num1 == null || num2 == null || num1.length() == 0 || num2.length() == 0){
+            return "";
+        }
+        if("0".equals(num1) || "0".equals(num2)){
+            return "0";
+        }
+        int length1 = num1.length();
+        int length2 = num2.length();
+        int[] res = new int[length1 + length2];
+        for(int i = length1 - 1; i >= 0; --i){
+            int n1 = num1.charAt(i) - '0';
+            for(int j = length2 - 1; j >= 0; --j){
+                int n2 = num2.charAt(j) - '0';
+                res[i + j + 1] += n1 * n2;
+                if(res[i + j + 1] > 9){
+                    res[i + j] += res[i + j + 1] / 10;
+                    res[i + j + 1] %= 10;
+                }
+            }
+        }
+        int index = 0;
+        while(res[index] == 0){
+            ++index;
+        }
+        StringBuilder sb = new StringBuilder();
+        for(; index < res.length; ++index){
+            sb.append(res[index]);
+        }
+        return sb.toString();
+    }
+
 }
