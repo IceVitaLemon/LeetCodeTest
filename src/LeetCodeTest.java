@@ -796,4 +796,202 @@ public class LeetCodeTest {
         return sb.toString();
     }
 
+
+    //剑指 Offer 63. 股票的最大利润(只能买卖一次)
+//    假设把某股票的价格按照时间先后顺序存储在数组中，请问买卖该股票一次可能获得的最大利润是多少？
+//
+//             
+//
+//    示例 1:
+//
+//    输入: [7,1,5,3,6,4]
+//    输出: 5
+//    解释: 在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。
+//    注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格。
+//    示例 2:
+//
+//    输入: [7,6,4,3,1]
+//    输出: 0
+//    解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+//
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/gu-piao-de-zui-da-li-run-lcof
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    public int maxProfit(int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+
+        int minValue = prices[0];
+        int profit = 0;
+        for(int i = 1; i < prices.length; ++i){
+            profit = Math.max(profit, prices[i] - minValue);
+            if(minValue > prices[i]){
+                minValue = prices[i];
+            }
+        }
+        return profit;
+    }
+
+    //买卖股票的最佳时机 II
+//    给定一个数组，它的第 i 个元素是一支给定股票第 i 天的价格。
+//
+//    设计一个算法来计算你所能获取的最大利润。你可以尽可能地完成更多的交易（多次买卖一支股票）。
+//
+//    注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+//
+//    示例 1:
+//
+//    输入: [7,1,5,3,6,4]
+//    输出: 7
+//    解释: 在第 2 天（股票价格 = 1）的时候买入，在第 3 天（股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+//                 随后，在第 4 天（股票价格 = 3）的时候买入，在第 5 天（股票价格 = 6）的时候卖出, 这笔交易所能获得利润 = 6-3 = 3 。
+//    示例 2:
+//
+//    输入: [1,2,3,4,5]
+//    输出: 4
+//    解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。
+//                 注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。
+//                 因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+//    示例 3:
+//
+//    输入: [7,6,4,3,1]
+//    输出: 0
+//    解释: 在这种情况下, 没有交易完成, 所以最大利润为 0。
+//
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-ii
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    public int maxProfit2(int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        int maxHold = -prices[0];
+        int maxSold = 0;
+        int tmpHold = 0;
+        int tmpSold = 0;
+
+        for(int i = 0; i < prices.length; ++i){
+            tmpHold = Math.max(maxHold, maxSold - prices[i]);
+            tmpSold = Math.max(tmpSold, maxHold + prices[i]);
+            maxHold = tmpHold;
+            maxSold = tmpSold;
+        }
+
+        return maxSold;
+    }
+
+    //买卖股票的最佳时机 III
+//    给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+//    设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。
+//    注意: 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+//
+//    示例 1:
+//
+//    输入: [3,3,5,0,0,3,1,4]
+//    输出: 6
+//    解释: 在第 4 天（股票价格 = 0）的时候买入，在第 6 天（股票价格 = 3）的时候卖出，这笔交易所能获得利润 = 3-0 = 3 。
+//                 随后，在第 7 天（股票价格 = 1）的时候买入，在第 8 天 （股票价格 = 4）的时候卖出，这笔交易所能获得利润 = 4-1 = 3 。
+//    示例 2:
+//
+//    输入: [1,2,3,4,5]
+//    输出: 4
+//    解释: 在第 1 天（股票价格 = 1）的时候买入，在第 5 天 （股票价格 = 5）的时候卖出, 这笔交易所能获得利润 = 5-1 = 4 。  
+//                 注意你不能在第 1 天和第 2 天接连购买股票，之后再将它们卖出。  
+//                 因为这样属于同时参与了多笔交易，你必须在再次购买前出售掉之前的股票。
+//    示例 3:
+//
+//    输入: [7,6,4,3,1]
+//    输出: 0
+//    解释: 在这个情况下, 没有交易完成, 所以最大利润为 0。
+//
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-iii
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+
+
+
+//    最佳买卖股票时机含冷冻期
+//    给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+//
+//    设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+//
+//    你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+//    卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+//
+//    示例:
+//
+//    输入: [1,2,3,0,2]
+//    输出: 3
+//    解释: 对应的交易状态为: [买入, 卖出, 冷冻期, 买入, 卖出]
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-cooldown
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    public int maxProfitWithCold(int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        int cash = 0;
+        int hold = 0;
+        int cold = 0;
+        int preCash = 0;
+        int preHold = -prices[0];
+        int preCold = 0;
+        for(int i = 0; i < prices.length; ++i){
+            cash = preHold + prices[i];
+            hold = Math.max(preHold, preCold - prices[i]);
+            cold = Math.max(preCold, preCash);
+            preCash = cash;
+            preHold = hold;
+            preCold = cold;
+        }
+        return Math.max(cold, cash);
+    }
+
+//    买卖股票的最佳时机含手续费
+//    给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
+//
+//    你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+//
+//    返回获得利润的最大值。
+//
+//    注意：这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
+//
+//    示例 1:
+//
+//    输入: prices = [1, 3, 2, 8, 4, 9], fee = 2
+//    输出: 8
+//    解释: 能够达到的最大利润:
+//    在此处买入 prices[0] = 1
+//    在此处卖出 prices[3] = 8
+//    在此处买入 prices[4] = 4
+//    在此处卖出 prices[5] = 9
+//    总利润: ((8 - 1) - 2) + ((9 - 4) - 2) = 8.
+//
+//    来源：力扣（LeetCode）
+//    链接：https://leetcode-cn.com/problems/best-time-to-buy-and-sell-stock-with-transaction-fee
+//    著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+    public int maxProfitWithFee(int[] prices, int fee) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        int cash = 0;
+        int hold = 0;
+        int preCash = 0;
+        int preHold = -prices[0];
+        for(int i = 0; i < prices.length; ++i){
+            cash = Math.max(preCash, preHold + prices[i] - fee);
+            hold = Math.max(preHold, preCash - prices[i]);
+            preCash = cash;
+            preHold = hold;
+        }
+        return cash;
+    }
+
+    //关于交易次数有限制的股票交易 https://leetcode-cn.com/circle/article/qiAgHn/
+    // dp[i][k][s] 其中 i 是第几天，k是第几次交易，s是状态（0 表示持现金，1表示持股票）
+    // 初始状态 dp[0][0-k][1] = -prices[0]
+    // 状态转移方程 dp[i][k][0] = Math.max(dp[i - 1][k][0], dp[i - 1][k][1] + prices[i])
+    //             dp[i][k][1] = Math.max(dp[i - 1][k][1], dp[i - 1][k - 1][0] - prices[i])
+
 }
